@@ -305,6 +305,8 @@ export const createStorefrontOrder = createServerFn({ method: "POST" })
     // Items in the shape every consumer (dashboard, RPC, chat) expects.
     const items = data.items.map((it) => ({
       productId: it.productId,
+      // The stock RPCs (cupai_resolve_product) read snake_case `product_id`.
+      product_id: it.productId,
       product_name: it.name,
       name: it.name,
       price: it.price,
