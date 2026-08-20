@@ -10,6 +10,8 @@
  *   1  IDENTITY        who it is
  *   2  VOICE           how it talks (human, never robotic, never "AI")
  *   3  UNDERSTANDING   how it works out what the customer means
+ *   3d RESOLUTION      mapping the customer's wording to real catalogue values
+ *   3e CONTINUITY      settled facts are never re-asked or contradicted
  *   4  CLARIFY         how it asks when it genuinely did not understand
  *   5  SELLING         how it sells
  *   6  TRUTH           where facts may come from
