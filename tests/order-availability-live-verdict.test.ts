@@ -44,4 +44,14 @@ describe("live availability verdict", () => {
     expect(result.available).toBe(0);
     expect(buildLiveAvailabilityBlock(result)).toContain("status: product_sold_out");
   });
+
+  it("fails closed when a product has no canonical stock rows", () => {
+    const result = checkSelectionAvailability(
+      [{ id: "p1", name: "قميص", variants: [] }],
+      { product_name: "قميص", quantity: 1 },
+    );
+
+    expect(result.status).toBe("product_sold_out");
+    expect(result.available).toBe(0);
+  });
 });
