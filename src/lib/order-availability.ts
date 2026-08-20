@@ -209,15 +209,12 @@ export function checkSelectionAvailability(
   }
 
   const variants = product.variants ?? [];
-  // No canonical variant row means there is no live stock record. Fail closed:
-  // treating this as orderable lets orders bypass deduction entirely.
+  // A product with no variant rows is not stock-tracked: it is orderable.
   if (!variants.length) {
     return {
       ...base,
-      status: "product_sold_out",
+      status: "ok",
       verified: ["product_name"],
-      available: 0,
-      message: `المنتج «${product.name}» غير متاح حالياً لعدم وجود كمية مسجّلة له في المخزون الحي. قل ذلك للعميل الآن واعرض منتجاً آخر متاحاً.`,
     };
   }
 

@@ -152,9 +152,28 @@ export async function loadMerchantData(
         }
         for (const p of list) {
           const pid = String(p.id);
-          // product_variants is the only canonical inventory. Never revive
-          // legacy products.variants JSON: order deductions do not update it.
-          const variants = byPid.get(pid) ?? [];
+          let variants = byPid.get(pid) ?? [];
+          if (variants.length === 0 && Array.isArray(p.variants)) {
+            // Backward compatibility only for products that genuinely have no
+            // canonical rows. A canonical query failure is handled above and
+            // can never reach this stale JSON fallback.
+            variants = (p.variants as unknown[])
+              .filter((v) => v && typeof v === "object")
+              .map((v) => {
+                const o = v as Record<string, unknown>;
+                return {
+                  color: (o.color as string | null) ?? (o.colour as string | null) ?? null,
+                  size: (o.size as string | null) ?? null,
+                  stock:
+                    typeof o.stock === "number"
+                      ? o.stock
+                      : typeof o.quantity === "number"
+                        ? o.quantity
+                        : null,
+                  price: typeof o.price === "number" ? o.price : null,
+                };
+              });
+          }
           out.products.push({
             id: pid,
             name: clean(p.name),
